@@ -76,9 +76,6 @@ class LoginState extends State<Login> {
     TextStyle defaultStyle = TextStyle(color: Colors.grey, fontSize: 20.0);
     TextStyle linkStyle = TextStyle(color: Theme.of(context).primaryColor);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Rasthiyaduwa'),
-      ),
       body: Builder(
         builder: (context) => Form(
           key: _formKey,
@@ -87,7 +84,15 @@ class LoginState extends State<Login> {
             child: ListView(
               children: <Widget>[
                 //Logo ekata
-                Container(height: 135),
+                Container(height: 50),
+                Center(
+                  child: Text(
+                    "රටවටේ",
+                    style: TextStyle(
+                      fontSize: 35,
+                    ),
+                  ),
+                ),
 
                 //Username Field
                 Container(

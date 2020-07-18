@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(builder: (ctx, auth, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Rasthiyaduwa",
+        title: "RataWate",
         home: auth.isAuth ? HomeScreen() : Login(),
         theme: ThemeData(
           brightness: Brightness.light,
