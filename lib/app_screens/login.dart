@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart';
-
-var url = "http://10.0.2.2:8080/addEvent";
+import './register.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -13,7 +10,6 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  DateTime _dateTime = DateTime.now();
   var _formKey = GlobalKey<FormState>();
 
   TextEditingController usernameController = TextEditingController();
@@ -99,6 +95,7 @@ class LoginState extends State<Login> {
                   margin: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.1, vertical: 8.0),
                   child: TextFormField(
+                    obscureText: true,
                     controller: passwordController,
                     validator: (String value) {
                       if (value.isEmpty) {
@@ -173,7 +170,9 @@ class LoginState extends State<Login> {
                             style: linkStyle,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                print('register');
+                                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return Register();
+                                }));
                               }),
                       ],
                     ),
