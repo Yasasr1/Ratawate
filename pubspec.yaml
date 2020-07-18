@@ -1,5 +1,5 @@
 name: rasthiyaduwa_app
-description: A new Flutter project.
+description: A traveling app
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -23,8 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  form_bloc: ^0.5.1
+  flutter_form_bloc: ^0.4.2
+  flutter_bloc: ^0.21.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
@@ -32,6 +33,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  http: ^0.12.1
+  flutter_calendar_carousel: ^1.4.12
+  characters: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
