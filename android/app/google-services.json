@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "799263468911",
+    "firebase_url": "https://ratawate-6221a.firebaseio.com",
+    "project_id": "ratawate-6221a",
+    "storage_bucket": "ratawate-6221a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799263468911:android:9a9d035e663f50972d0c9a",
+        "android_client_info": {
+          "package_name": "com.lmproject.ratawate_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799263468911-f5b0n27lmeacpl4bou0i1381045p79ke.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApRSeihG7PqOsZs_HA2WVaK33mrphTgnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799263468911-f5b0n27lmeacpl4bou0i1381045p79ke.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

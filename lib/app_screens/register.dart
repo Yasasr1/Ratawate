@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
+import '../models/http_exception.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -12,15 +16,57 @@ class RegisterState extends State<Register> {
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  var isLoading = false;
+  void _showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text('An Error Occured!'),
+              content: Text(message),
+              actions: <Widget>[
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Ok"))
+              ],
+            ));
+  }
 
   RegisterState();
 
-  void register() async {
+  Future<void> register() async {
     debugPrint('funtion called');
-    var body = jsonEncode({
+    setState(() {
+      isLoading = true;
+    });
+    try {
+ await Provider.of<Auth>(context, listen: false).signup(
+      usernameController.text,
+      passwordController.text,
+    );
+    }on HttpException catch (error) {
+      var errorMessage = "Registration failed";
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = "This email already exists";
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'This password is too weak';
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      const errorMessage = "Registration failed! Please try again later";
+      _showErrorDialog(errorMessage);
+    }
+   
+    setState(() {
+      isLoading = false;
+    });
+    /*var body = jsonEncode({
       'username': usernameController.text,
       'password': passwordController.text
-    });
+    });*/
     //Methanin yawapan json
   }
 
@@ -42,7 +88,6 @@ class RegisterState extends State<Register> {
             padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
             child: ListView(
               children: <Widget>[
-
                 Container(height: 115),
 
                 //Username Field
@@ -176,27 +221,33 @@ class RegisterState extends State<Register> {
                 ),
 
                 //Login button
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.1, vertical: 8.0),
-                  decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-                  child: RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).accentColor,
-                    child: Text(
-                      'Register',
-                      textScaleFactor: 1.5,
+                if (isLoading)
+                  Center(
+                      child: CircularProgressIndicator(
+                    backgroundColor: Colors.purple,
+                  ))
+                else
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.1, vertical: 8.0),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+                    child: RaisedButton(
+                      color: Theme.of(context).primaryColor,
+                      textColor: Theme.of(context).accentColor,
+                      child: Text(
+                        'Register',
+                        textScaleFactor: 1.5,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (_formKey.currentState.validate()) {
+                            register();
+                          }
+                        });
+                      },
                     ),
-                    onPressed: () {
-                      setState(() {
-                        if (_formKey.currentState.validate()) {
-                          register();
-                        }
-                      });
-                    },
                   ),
-                ),
               ],
             ),
           ),

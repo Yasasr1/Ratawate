@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import './register.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
+import '../models/http_exception.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -14,16 +17,55 @@ class LoginState extends State<Login> {
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  var isLoading = false;
+
+  void _showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text('An Error Occured!'),
+              content: Text(message),
+              actions: <Widget>[
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Ok"))
+              ],
+            ));
+  }
 
   LoginState();
 
-  void login() async {
-    debugPrint('funtion called');
+  Future<void> login() async {
+    /*debugPrint('funtion called');
     var body = jsonEncode({
       'username': usernameController.text,
       'password': passwordController.text
+    });*/
+    setState(() {
+      isLoading = true;
     });
-    //Methanin yawapan json
+    try {
+      await Provider.of<Auth>(context, listen: false)
+          .login(usernameController.text, passwordController.text);
+    } on HttpException catch (error) {
+      var errorMessage = "Login failed";
+      if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = "Could not find a user with that email";
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = "Invalid password";
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      const errorMessage = "Login failed! Please try again later";
+      _showErrorDialog(errorMessage);
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -66,7 +108,7 @@ class LoginState extends State<Login> {
                       debugPrint('Something changed in Text Field');
                     },
                     decoration: InputDecoration(
-                        labelText: 'Username',
+                        labelText: 'Email',
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(top: 0),
                           // add padding to adjust icon
@@ -135,27 +177,34 @@ class LoginState extends State<Login> {
                 ),
 
                 //Login button
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.1, vertical: 8.0),
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-                  child: RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).accentColor,
-                    child: Text(
-                      'Login',
-                      textScaleFactor: 1.5,
+                if (isLoading)
+                  Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.purple,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        if (_formKey.currentState.validate()) {
-                          login();
-                        }
-                      });
-                    },
+                  )
+                else
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.1, vertical: 8.0),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+                    child: RaisedButton(
+                      color: Theme.of(context).primaryColor,
+                      textColor: Theme.of(context).accentColor,
+                      child: Text(
+                        'Login',
+                        textScaleFactor: 1.5,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (_formKey.currentState.validate()) {
+                            login();
+                          }
+                        });
+                      },
+                    ),
                   ),
-                ),
 
                 Container(
                   margin: EdgeInsets.symmetric(
@@ -170,9 +219,9 @@ class LoginState extends State<Login> {
                             style: linkStyle,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return Register();
-                                }));
+                                Navigator.of(context).pushNamed(
+                                  '/register',
+                                );
                               }),
                       ],
                     ),
