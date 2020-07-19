@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:rasthiyaduwa_app/app_screens/register.dart';
+import 'package:rasthiyaduwa_app/providers/destinations.dart';
 import './app_screens/login.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
-        )
+        ),
+        ChangeNotifierProxyProvider<Auth, Destinations>(
+          update: (ctx, auth, previousDestinations) => Destinations(auth.token, previousDestinations == null ? [] : previousDestinations.destinations),
+        ),
       ],
       child: Consumer<Auth>(builder: (ctx, auth, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
