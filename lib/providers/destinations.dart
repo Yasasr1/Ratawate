@@ -36,7 +36,7 @@ class Destinations with ChangeNotifier {
     }
   }
 
-  List<Destination> get destinations {
+  List<Destination> get getDestinations {
     return [..._destinations];
   }
 }

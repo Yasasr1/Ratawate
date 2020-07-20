@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rasthiyaduwa_app/providers/destinations.dart';
+import 'package:rasthiyaduwa_app/widgets/destination_item.dart';
+import './side_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -28,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var destinations = Provider.of<Destinations>(context);
-    var destinationsList = destinations.destinations;
+    var destinationsList = destinations.getDestinations;
 
     return Scaffold(
       appBar: AppBar(
@@ -36,24 +38,23 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: TextField(
           decoration: InputDecoration(
-            
-            hintText: "Search Destination",
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purpleAccent),
-              borderRadius: BorderRadius.all(
-                Radius.circular(40),
+              hintText: "Search Destination",
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.purpleAccent),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(40),
+                ),
               ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purple),
-              borderRadius: BorderRadius.all(
-                Radius.circular(40),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(40),
+                ),
               ),
-            ),
-            isDense: true,
-            contentPadding: EdgeInsets.all(8)
-          ),
+              isDense: true,
+              contentPadding: EdgeInsets.all(8)),
         ),
+        iconTheme: new IconThemeData(color: Colors.purple),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
@@ -75,11 +76,15 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : Container(
               child: ListView.builder(
-                itemBuilder: (ctx, index) =>
-                    Text(destinationsList[index].title),
+                itemBuilder: (ctx, index) => DestinationItem(
+                    destinationsList[index].title,
+                    destinationsList[index].imageUrls[0]['url'],
+                    destinationsList[index].city,
+                    destinationsList[index].likedUsers.length),
                 itemCount: destinationsList.length,
               ),
             ),
+      drawer: SideDrawer(),
     );
   }
 }

@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
 import './app_screens/home_screen.dart';
+import './app_screens/add_destination.dart';
+import './app_screens/home_screen.dart';
 
 void main() => runApp(new MyApp());
 
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
                 auth.token,
                 previousDestinations == null
                     ? []
-                    : previousDestinations.destinations),
+                    : previousDestinations.getDestinations),
           ),
         ],
         child: Consumer<Auth>(
@@ -41,12 +43,15 @@ class MyApp extends StatelessWidget {
                             : Login(),
                   ),
             theme: ThemeData(
+              iconTheme: IconThemeData(color: Colors.purple),
               brightness: Brightness.light,
-              primaryColor: Colors.purple,
+              primarySwatch: Colors.purple,
               accentColor: Colors.white,
             ),
             routes: {
               '/register': (context) => Register(),
+              '/homescreen': (context) => HomeScreen(),
+              '/adddestination': (context) => AddDestination()
             },
           ),
         ));
