@@ -228,6 +228,15 @@ class LoginState extends State<Login> {
                                   '/register',
                                 );
                               }),
+                        TextSpan(
+                            text: 'Tempory',
+                            style: linkStyle,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).pushNamed(
+                                  '/adddestination',
+                                );
+                              }),
                       ],
                     ),
                   ),

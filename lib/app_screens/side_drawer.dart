@@ -15,19 +15,43 @@ class SideDrawerState extends State<SideDrawer> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text('myemail@gmail.com'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "piyumal@gmail.com",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Theme.of(context).accentColor,
+                  ),
+                )
+              ],
+            ),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
           ),
           ListTile(
-            title: Text('Destinations'),
+            title: Text(
+              'Destinations',
+              style: TextStyle(
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            title: Text('Add Destinations'),
+            title: Text(
+              'Add Destinations',
+              style: TextStyle(
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             onTap: () {
               Navigator.pop(context);
             },
