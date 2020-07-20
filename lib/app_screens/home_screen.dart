@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rasthiyaduwa_app/providers/destinations.dart';
+import './side_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: destinationsList.length,
               ),
             ),
+      drawer: SideDrawer(),
     );
   }
 }
