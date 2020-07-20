@@ -32,7 +32,40 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Destinations"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: TextField(
+          decoration: InputDecoration(
+            
+            hintText: "Search Destination",
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.purpleAccent),
+              borderRadius: BorderRadius.all(
+                Radius.circular(40),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.purple),
+              borderRadius: BorderRadius.all(
+                Radius.circular(40),
+              ),
+            ),
+            isDense: true,
+            contentPadding: EdgeInsets.all(8)
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+            color: Colors.purple,
+          ),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () {},
+            color: Colors.purple,
+          ),
+        ],
       ),
       body: _isLoading
           ? Center(
