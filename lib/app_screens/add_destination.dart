@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class AddDestination extends StatefulWidget {
   @override
@@ -8,7 +9,16 @@ class AddDestination extends StatefulWidget {
 }
 
 class AddDestinationState extends State<AddDestination> {
+  String type;
+  String district;
   var _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    type = '';
+    district = '';
+  }
 
   TextEditingController titleController = TextEditingController();
   TextEditingController typeController = TextEditingController();
@@ -56,7 +66,7 @@ class AddDestinationState extends State<AddDestination> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add a Event'),
+        title: Text('Add a new destination'),
       ),
       body: Builder(
         builder: (context) => Form(
@@ -65,6 +75,186 @@ class AddDestinationState extends State<AddDestination> {
             padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
             child: ListView(
               children: <Widget>[
+                //Type Field
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: DropDownFormField(
+                    titleText: 'Type',
+                    hintText: 'Please choose one',
+                    value: type,
+                    onSaved: (value) {
+                      setState(() {
+                        type = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        type = value;
+                      });
+                    },
+                    dataSource: [
+                      {
+                        "display": "Beach",
+                        "value": "Beach",
+                      },
+                      {
+                        "display": "Hiking",
+                        "value": "Hiking",
+                      },
+                      {
+                        "display": "Historical",
+                        "value": "Historical",
+                      },
+                      {
+                        "display": "Nature",
+                        "value": "Nature",
+                      },
+                      {
+                        "display": "Park",
+                        "value": "Park",
+                      },
+                      {
+                        "display": "Religious",
+                        "value": "Religious",
+                      },
+                      {
+                        "display": "Water",
+                        "value": "Water",
+                      },
+                      {
+                        "display": "Waterfall",
+                        "value": "Waterfall",
+                      },
+                    ],
+                    textField: 'display',
+                    valueField: 'value',
+                  ),
+                ),
+
+                //District Field
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: DropDownFormField(
+                    titleText: 'District',
+                    hintText: 'Please choose one',
+                    value: district,
+                    onSaved: (value) {
+                      setState(() {
+                        district = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        district = value;
+                      });
+                    },
+                    dataSource: [
+                      {
+                        "display": "Ampara",
+                        "value": "Ampara",
+                      },
+                      {
+                        "display": "Anuradhapura",
+                        "value": "Anuradhapura",
+                      },
+                      {
+                        "display": "Badulla",
+                        "value": "Badulla",
+                      },
+                      {
+                        "display": "Batticaloa",
+                        "value": "Batticaloa",
+                      },
+                      {
+                        "display": "Colombo",
+                        "value": "Colombo",
+                      },
+                      {
+                        "display": "Galle",
+                        "value": "Galle",
+                      },
+                      {
+                        "display": "Gampaha",
+                        "value": "Gampaha",
+                      },
+                      {
+                        "display": "Hambantota",
+                        "value": "Hambantota",
+                      },
+                      {
+                        "display": "Jaffna",
+                        "value": "Jaffna",
+                      },
+                      {
+                        "display": "Kalutara",
+                        "value": "Kalutara",
+                      },
+                      {
+                        "display": "Kandy",
+                        "value": "Kandy",
+                      },
+                      {
+                        "display": "Kegalle",
+                        "value": "Kegalle",
+                      },
+                      {
+                        "display": "Kilinochchi",
+                        "value": "Kilinochchi",
+                      },
+                      {
+                        "display": "Kurunegala",
+                        "value": "Kurunegala",
+                      },
+                      {
+                        "display": "Mannar",
+                        "value": "Mannar",
+                      },
+                      {
+                        "display": "Matale",
+                        "value": "Matale",
+                      },
+                      {
+                        "display": "Matara",
+                        "value": "Matara",
+                      },
+                      {
+                        "display": "Monaragala",
+                        "value": "Monaragala",
+                      },
+                      {
+                        "display": "Mullaitivu",
+                        "value": "Mullaitivu",
+                      },
+                      {
+                        "display": "NuwaraEliya",
+                        "value": "NuwaraEliya",
+                      },
+                      {
+                        "display": "Polonnaruwa",
+                        "value": "Polonnaruwa",
+                      },
+                      {
+                        "display": "Puttalam",
+                        "value": "Puttalam",
+                      },
+                      {
+                        "display": "Ratnapura",
+                        "value": "Ratnapura",
+                      },
+                      {
+                        "display": "Trincomalee",
+                        "value": "Trincomalee",
+                      },
+                      {
+                        "display": "Vavuniya",
+                        "value": "Vavuniya",
+                      },
+                    ],
+                    textField: 'display',
+                    valueField: 'value',
+                  ),
+                ),
+
                 //Title Field
                 Padding(
                   padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -84,90 +274,6 @@ class AddDestinationState extends State<AddDestination> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Title',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(top: 0),
-                          // add padding to adjust icon
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        )),
-                  ),
-                ),
-
-                //Type Field
-                Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                  child: TextFormField(
-                    controller: typeController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a Title';
-                      }
-                      return null;
-                    },
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onChanged: (value) {
-                      debugPrint('Something changed in Text Field');
-                    },
-                    decoration: InputDecoration(
-                        labelText: 'Type',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(top: 0),
-                          // add padding to adjust icon
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        )),
-                  ),
-                ),
-
-                //District Field
-                Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                  child: TextFormField(
-                    controller: districtController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a Title';
-                      }
-                      return null;
-                    },
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onChanged: (value) {
-                      debugPrint('Something changed in Text Field');
-                    },
-                    decoration: InputDecoration(
-                        labelText: 'District',
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(top: 0),
                           // add padding to adjust icon
