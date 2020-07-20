@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import './providers/auth.dart';
 import './app_screens/home_screen.dart';
 import './app_screens/add_destination.dart';
+import './app_screens/home_screen.dart';
 
 void main() => runApp(new MyApp());
 
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
             ),
             routes: {
               '/register': (context) => Register(),
+              '/homescreen': (context) => HomeScreen(),
               '/adddestination': (context) => AddDestination()
             },
           ),

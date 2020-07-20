@@ -41,7 +41,9 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).pushNamed(
+                '/homescreen',
+              );
             },
           ),
           ListTile(
@@ -53,7 +55,33 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).pushNamed(
+                '/adddestination',
+              );
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Change my password',
+              style: TextStyle(
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            onTap: () {
+              //Change password
+            },
+          ),
+          ListTile(
+            title: Text(
+              'Log out',
+              style: TextStyle(
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            onTap: () {
+              //Change password
             },
           ),
         ],

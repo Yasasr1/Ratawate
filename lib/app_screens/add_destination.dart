@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:async';
+import './side_drawer.dart';
 
 class AddDestination extends StatefulWidget {
   @override
@@ -11,6 +15,8 @@ class AddDestination extends StatefulWidget {
 class AddDestinationState extends State<AddDestination> {
   String type;
   String district;
+  File _image;
+  final picker = ImagePicker();
   var _formKey = GlobalKey<FormState>();
 
   @override
@@ -44,6 +50,14 @@ class AddDestinationState extends State<AddDestination> {
     //send json
   }
 
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    print("image");
+    setState(() {
+      _image = File(pickedFile.path);
+    });
+  }
+
   void showSnackBar(BuildContext context) {
     var snackBar = SnackBar(
       backgroundColor: Colors.black54,
@@ -66,8 +80,12 @@ class AddDestinationState extends State<AddDestination> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add a new destination'),
+        title: Text(
+          'Add a new destination',
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
       ),
+      drawer: SideDrawer(),
       body: Builder(
         builder: (context) => Form(
           key: _formKey,
@@ -266,34 +284,20 @@ class AddDestinationState extends State<AddDestination> {
                       }
                       return null;
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
                     onChanged: (value) {
                       debugPrint('Something changed in Text Field');
                     },
                     decoration: InputDecoration(
-                        labelText: 'Title',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(top: 0),
-                          // add padding to adjust icon
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                      labelText: 'Title',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.only(top: 0),
+                        // add padding to adjust icon
+                        child: Icon(
+                          Icons.title,
+                          color: Colors.black,
                         ),
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        )),
+                      ),
+                    ),
                   ),
                 ),
 
@@ -304,38 +308,24 @@ class AddDestinationState extends State<AddDestination> {
                     controller: cityController,
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return 'Please enter a City';
+                        return 'Please enter a Title';
                       }
                       return null;
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
                     onChanged: (value) {
                       debugPrint('Something changed in Text Field');
                     },
                     decoration: InputDecoration(
-                        labelText: 'City',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(top: 0),
-                          // add padding to adjust icon
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                      labelText: 'City',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.only(top: 0),
+                        // add padding to adjust icon
+                        child: Icon(
+                          Icons.location_city,
+                          color: Colors.black,
                         ),
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        )),
+                      ),
+                    ),
                   ),
                 ),
 
@@ -346,80 +336,49 @@ class AddDestinationState extends State<AddDestination> {
                     controller: locationController,
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return 'Please enter a Location';
-                      }
-                      return null;
-                    },
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onChanged: (value) {
-                      debugPrint('Something changed in Text Field');
-                    },
-                    decoration: InputDecoration(
-                        labelText: 'Location',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(top: 0),
-                          // add padding to adjust icon
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        )),
-                  ),
-                ),
-
-                //Image Field
-                Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                  child: TextFormField(
-                    controller: imageUrlsController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
                         return 'Please enter a Title';
                       }
                       return null;
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
                     onChanged: (value) {
                       debugPrint('Something changed in Text Field');
                     },
                     decoration: InputDecoration(
-                        labelText: 'imageUrls',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(top: 0),
-                          // add padding to adjust icon
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                      labelText: 'Location',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.only(top: 0),
+                        // add padding to adjust icon
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.black,
                         ),
-                        labelStyle: TextStyle(
+                      ),
+                    ),
+                  ),
+                ),
+
+                Center(
+                  child: _image == null
+                      ? Text('No image selected.')
+                      : Image.file(_image),
+                ),
+                //Image Field
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: RaisedButton(
                           color: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context).accentColor,
+                          child: Text(
+                            'Add Image',
+                            textScaleFactor: 1.5,
+                          ),
+                          onPressed: getImage,
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        )),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -427,42 +386,21 @@ class AddDestinationState extends State<AddDestination> {
                 Padding(
                   padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                   child: TextFormField(
-                    maxLines: null,
+                    maxLines: 10,
+                    minLines: 4,
                     controller: descriptionController,
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return 'Please enter the description';
+                        return 'Please enter a Title';
                       }
                       return null;
                     },
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
                     onChanged: (value) {
                       debugPrint('Something changed in Text Field');
                     },
                     decoration: InputDecoration(
-                        labelText: 'Description',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(top: 0),
-                          // add padding to adjust icon
-                          child: Icon(
-                            Icons.description,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        )),
+                      labelText: 'Description',
+                    ),
                   ),
                 ),
 
