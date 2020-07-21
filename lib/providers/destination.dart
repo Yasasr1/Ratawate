@@ -9,15 +9,22 @@ class Destination with ChangeNotifier {
   double latitude;
   double longitude;
   String city;
+  String district;
+  String destinationType;
+  bool isVerified;
 
-  Destination({
-    this.id,
-    this.title,
-    this.description,
-    this.imageUrls,
-    this.likedUsers,
-    this.latitude,
-    this.longitude,
-    this.city,
-  });
+  Destination(
+      {this.id,
+      this.title,
+      this.description,
+      this.imageUrls,
+      this.likedUsers,
+      this.latitude,
+      this.longitude,
+      this.city,
+      this.district,
+      this.destinationType,
+      this.isVerified
+      });
 }
+

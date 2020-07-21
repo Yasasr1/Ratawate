@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:rasthiyaduwa_app/providers/auth.dart';
 
 class SideDrawer extends StatefulWidget {
   @override
@@ -7,6 +10,9 @@ class SideDrawer extends StatefulWidget {
 }
 
 class SideDrawerState extends State<SideDrawer> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -81,7 +87,7 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              //Change password
+              FirebaseAuth.instance.signOut();
             },
           ),
         ],

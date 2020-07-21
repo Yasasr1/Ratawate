@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
@@ -36,38 +39,30 @@ class RegisterState extends State<Register> {
   RegisterState();
 
   Future<void> register() async {
-    debugPrint('funtion called');
+    final _auth = FirebaseAuth.instance;
+    AuthResult authResult;
+
     setState(() {
       isLoading = true;
     });
-    try {
- await Provider.of<Auth>(context, listen: false).signup(
-      usernameController.text,
-      passwordController.text,
-    );
-    }on HttpException catch (error) {
-      var errorMessage = "Registration failed";
-      if (error.toString().contains('EMAIL_EXISTS')) {
-        errorMessage = "This email already exists";
-      } else if (error.toString().contains('INVALID_EMAIL')) {
-        errorMessage = 'This is not a valid email address';
-      } else if (error.toString().contains('WEAK_PASSWORD')) {
-        errorMessage = 'This password is too weak';
+     try {
+    authResult = await _auth.createUserWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
+    } on PlatformException catch (err) {
+      var message = "An error occured, Please check your credentials!";
+      if(err.message != null) {
+        message = err.message;
       }
-      _showErrorDialog(errorMessage);
-    } catch (error) {
-      const errorMessage = "Registration failed! Please try again later";
-      _showErrorDialog(errorMessage);
+      _showErrorDialog(message);
+
+    } catch (err) {
+      print(err);
     }
+
    
     setState(() {
       isLoading = false;
     });
-    /*var body = jsonEncode({
-      'username': usernameController.text,
-      'password': passwordController.text
-    });*/
-    //Methanin yawapan json
+   
   }
 
   @override

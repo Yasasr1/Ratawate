@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'dart:async';
+import 'dart:math';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'dart:typed_data';
+import 'package:firebase_storage/firebase_storage.dart';
+
 import './side_drawer.dart';
 
 class AddDestination extends StatefulWidget {
@@ -15,8 +18,7 @@ class AddDestination extends StatefulWidget {
 class AddDestinationState extends State<AddDestination> {
   String type;
   String district;
-  File _image;
-  final picker = ImagePicker();
+
   var _formKey = GlobalKey<FormState>();
 
   @override
@@ -30,32 +32,138 @@ class AddDestinationState extends State<AddDestination> {
   TextEditingController typeController = TextEditingController();
   TextEditingController districtController = TextEditingController();
   TextEditingController cityController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
-  TextEditingController imageUrlsController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  List<Asset> images = List<Asset>();
+  String _error;
+  List<String> imageUrls = [];
+  var _isLoading = false;
 
   AddDestinationState();
 
-  void send() async {
-    debugPrint('funtion called');
-    var body = jsonEncode({
-      'title': titleController.text,
-      'type': typeController.text,
-      'district': districtController.text,
-      'city': cityController.text,
-      'location': locationController.text,
-      'imageUrls': imageUrlsController.text,
-      'description': descriptionController.text,
-    });
-    //send json
+  void _showDialog(String message, String title) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text(title),
+              content: Text(message),
+              actions: <Widget>[
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Ok"))
+              ],
+            ));
   }
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-    print("image");
+  //render selected images as a grid
+  Widget buildGridView() {
+    if (images != null)
+      return GridView.count(
+        crossAxisCount: 3,
+        children: List.generate(images.length, (index) {
+          Asset asset = images[index];
+          return AssetThumb(
+            asset: asset,
+            width: 300,
+            height: 300,
+          );
+        }),
+      );
+    else
+      return Container(color: Colors.white);
+  }
+
+  //select and load images
+  Future<void> loadAssets() async {
     setState(() {
-      _image = File(pickedFile.path);
+      images = List<Asset>();
     });
+
+    List<Asset> resultList;
+    String error;
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 5,
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      if (error == null) _error = 'No Error Dectected';
+    });
+  }
+
+  //random string generator for image names
+  String _randomString(int length) {
+   var rand = new Random();
+   var codeUnits = new List.generate(
+      length, 
+      (index){
+         return rand.nextInt(33)+89;
+      }
+   );
+   
+   return new String.fromCharCodes(codeUnits);
+}
+
+  //handle uploading a single image
+  Future uploadImage(Asset asset) async {
+    //get image data compressed
+    ByteData byteData = await asset.getByteData(quality: 30);
+    String randString = _randomString(50);
+    print(randString);
+    List<int> imageData = byteData.buffer.asUint8List();
+    StorageReference ref =
+        FirebaseStorage.instance.ref().child('/destinationImages').child(randString);
+    StorageUploadTask uploadTask = ref.putData(imageData);
+
+    return await (await uploadTask.onComplete).ref.getDownloadURL();
+  }
+
+  Future submitDestination() async {
+    setState(() {
+      _isLoading = true;
+    });
+    List<String> urls = [];
+    try {
+    //upload all images
+    for (int i = 0; i < images.length; i++) {
+      String url = await uploadImage(images[i]);
+      urls.add(url);
+    }
+    setState(() {
+      imageUrls = urls;
+    });
+
+    
+      var responce = await Firestore.instance.collection('destinations').add({
+        'title': titleController.text,
+        'description': descriptionController.text,
+        'imageUrls': imageUrls,
+        'likedUsers': [],
+        'city': cityController.text,
+        'district': districtController.text,
+        'destinationType': type,
+        'isVerified': false
+      });
+    } catch (err) {
+      _showDialog(err.toString(), 'An Error Occured!');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    _showDialog("Destination Added","Success");
+
+    
   }
 
   void showSnackBar(BuildContext context) {
@@ -329,39 +437,12 @@ class AddDestinationState extends State<AddDestination> {
                   ),
                 ),
 
-                //Location Field
-                Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                  child: TextFormField(
-                    controller: locationController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a Title';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      debugPrint('Something changed in Text Field');
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Location',
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.only(top: 0),
-                        // add padding to adjust icon
-                        child: Icon(
-                          Icons.location_on,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
+                Container(
+                  width: double.infinity,
+                  height: 80,
+                  child: buildGridView(),
                 ),
 
-                Center(
-                  child: _image == null
-                      ? Text('No image selected.')
-                      : Image.file(_image),
-                ),
                 //Image Field
                 Padding(
                   padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -372,10 +453,10 @@ class AddDestinationState extends State<AddDestination> {
                           color: Theme.of(context).primaryColor,
                           textColor: Theme.of(context).accentColor,
                           child: Text(
-                            'Add Image',
+                            'Add Images',
                             textScaleFactor: 1.5,
                           ),
-                          onPressed: getImage,
+                          onPressed: loadAssets,
                         ),
                       ),
                     ],
@@ -427,24 +508,23 @@ class AddDestinationState extends State<AddDestination> {
                       ),
 
                       //Add Button
-                      Expanded(
-                        child: RaisedButton(
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).accentColor,
-                          child: Text(
-                            'Add',
-                            textScaleFactor: 1.5,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              if (_formKey.currentState.validate()) {
-                                showSnackBar(context);
-                                debugPrint('Add button clicked');
-                              }
-                            });
-                          },
-                        ),
-                      ),
+                      _isLoading == true
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.purple,
+                              ),
+                            )
+                          : Expanded(
+                              child: RaisedButton(
+                                color: Theme.of(context).primaryColor,
+                                textColor: Theme.of(context).accentColor,
+                                child: Text(
+                                  'Add',
+                                  textScaleFactor: 1.5,
+                                ),
+                                onPressed: submitDestination,
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -463,8 +543,6 @@ class AddDestinationState extends State<AddDestination> {
     typeController.text = '';
     districtController.text = '';
     cityController.text = '';
-    locationController.text = '';
-    imageUrlsController.text = '';
     descriptionController.text = '';
   }
 }

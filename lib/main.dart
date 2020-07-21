@@ -3,6 +3,7 @@ import 'package:rasthiyaduwa_app/app_screens/destination_details_screen.dart';
 import 'package:rasthiyaduwa_app/app_screens/register.dart';
 import 'package:rasthiyaduwa_app/app_screens/splash_screen.dart';
 import 'package:rasthiyaduwa_app/providers/destinations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import './app_screens/login.dart';
 import 'package:provider/provider.dart';
 
@@ -21,28 +22,20 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(
             value: Auth(),
           ),
-          ChangeNotifierProxyProvider<Auth, Destinations>(
-            update: (ctx, auth, previousDestinations) => Destinations(
-                auth.token,
-                previousDestinations == null
-                    ? []
-                    : previousDestinations.getDestinations),
+          ChangeNotifierProvider.value(
+           value: Destinations(),
           ),
         ],
         child: Consumer<Auth>(
           builder: (ctx, auth, _) => MaterialApp(
             debugShowCheckedModeBanner: false,
             title: "RataWate",
-            home: auth.isAuth
-                ? HomeScreen()
-                : FutureBuilder(
-                    future: auth.tryAutoLogin(),
-                    builder: (ctx, authResultSnapshot) =>
-                        authResultSnapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? SplashScreen()
-                            : Login(),
-                  ),
+            home: StreamBuilder(stream: FirebaseAuth.instance.onAuthStateChanged, builder: (ctx, userSnapshot) {
+              if(userSnapshot.hasData) {
+                return HomeScreen();
+              }
+              return Login();
+            }),
             theme: ThemeData(
               iconTheme: IconThemeData(color: Colors.purple),
               brightness: Brightness.light,

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
@@ -38,31 +40,25 @@ class LoginState extends State<Login> {
   LoginState();
 
   Future<void> login() async {
-    /*debugPrint('funtion called');
-    var body = jsonEncode({
-      'username': usernameController.text,
-      'password': passwordController.text
-    });*/
+    final _auth = FirebaseAuth.instance;
+    AuthResult authResult;
     setState(() {
       isLoading = true;
     });
     try {
-      await Provider.of<Auth>(context, listen: false)
-          .login(usernameController.text, passwordController.text);
-    } on HttpException catch (error) {
-      var errorMessage = "Login failed";
-      if (error.toString().contains('INVALID_EMAIL')) {
-        errorMessage = 'This is not a valid email address';
-      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-        errorMessage = "Could not find a user with that email";
-      } else if (error.toString().contains('INVALID_PASSWORD')) {
-        errorMessage = "Invalid password";
+    authResult = await _auth.signInWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
+    Provider.of<Auth>(context, listen: false).setUserId(authResult.user.uid);
+    } on PlatformException catch (err) {
+      var message = "An error occured, Please check your credentials!";
+      if(err.message != null) {
+        message = err.message;
       }
-      _showErrorDialog(errorMessage);
-    } catch (error) {
-      const errorMessage = "Login failed! Please try again later";
-      _showErrorDialog(errorMessage);
+      _showErrorDialog(message);
+
+    } catch (err) {
+      print(err);
     }
+
     setState(() {
       isLoading = false;
     });

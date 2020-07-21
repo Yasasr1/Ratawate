@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (ctx, index) => DestinationItem(
                     destinationsList[index].id,
                     destinationsList[index].title,
-                    destinationsList[index].imageUrls[0]['url'],
+                    destinationsList[index].imageUrls[0],
                     destinationsList[index].city,
                     destinationsList[index].likedUsers.length),
                 itemCount: destinationsList.length,
