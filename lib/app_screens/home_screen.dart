@@ -39,18 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: TextField(
           decoration: InputDecoration(
               hintText: "Search Destination",
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.purpleAccent),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(40),
-                ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none
               ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(40),
-                ),
-              ),
+              filled: true,
+              fillColor: Colors.black12,
               isDense: true,
               contentPadding: EdgeInsets.all(8)),
         ),
@@ -77,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : Container(
               child: ListView.builder(
                 itemBuilder: (ctx, index) => DestinationItem(
+                    destinationsList[index].id,
                     destinationsList[index].title,
                     destinationsList[index].imageUrls[0]['url'],
                     destinationsList[index].city,

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:rasthiyaduwa_app/app_screens/destination_details_screen.dart';
 import 'package:rasthiyaduwa_app/app_screens/register.dart';
 import 'package:rasthiyaduwa_app/app_screens/splash_screen.dart';
 import 'package:rasthiyaduwa_app/providers/destinations.dart';
@@ -51,7 +52,8 @@ class MyApp extends StatelessWidget {
             routes: {
               '/register': (context) => Register(),
               '/homescreen': (context) => HomeScreen(),
-              '/adddestination': (context) => AddDestination()
+              '/adddestination': (context) => AddDestination(),
+              '/destinationDetails': (context) => DestinationDetailsScreen()
             },
           ),
         ));

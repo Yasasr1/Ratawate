@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
 class DestinationItem extends StatelessWidget {
+  final String _id;
   final String _title;
   final String _image;
   final String _district;
   final int _likes;
 
-  DestinationItem(this._title, this._image, this._district, this._likes);
+  DestinationItem(this._id,this._title, this._image, this._district, this._likes);
+
+  navigateToDetailsScreen(BuildContext context) {
+    Navigator.of(context).pushNamed('/destinationDetails', arguments: _id);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,7 +58,7 @@ class DestinationItem extends StatelessWidget {
                   child: Material(
                 child: InkWell(
                   splashColor: Colors.purple.withOpacity(0.2),
-                  onTap: () {},
+                  onTap: () => navigateToDetailsScreen(context),
                 ),
                 color: Colors.transparent,
               ))
