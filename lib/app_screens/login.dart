@@ -71,6 +71,12 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.title;
+    AssetImage assetImage = AssetImage('images/logo.png');
+    Image image = Image(
+      image: assetImage,
+      width: 250.0,
+      height: 250.0,
+    );
     var _mediaQueryData = MediaQuery.of(context);
     var screenWidth = _mediaQueryData.size.width;
     TextStyle defaultStyle = TextStyle(color: Colors.grey, fontSize: 20.0);
@@ -86,11 +92,8 @@ class LoginState extends State<Login> {
                 //Logo ekata
                 Container(height: 50),
                 Center(
-                  child: Text(
-                    "රටවටේ",
-                    style: TextStyle(
-                      fontSize: 35,
-                    ),
+                  child: Container(
+                    child: image,
                   ),
                 ),
 
