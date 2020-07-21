@@ -36,7 +36,16 @@ class Destinations with ChangeNotifier {
     }
   }
 
-  List<Destination> get destinations {
+  List<Destination> get getDestinations {
     return [..._destinations];
+  }
+
+  Destination getById(String id) {
+    final destinationList = [..._destinations];
+    Destination destinationFound = destinationList.firstWhere((des) {
+      return des.id == id;
+    });
+    return destinationFound;
+    
   }
 }

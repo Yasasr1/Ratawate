@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rasthiyaduwa_app/providers/destinations.dart';
+import 'package:rasthiyaduwa_app/widgets/destination_item.dart';
 import './side_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,11 +30,37 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var destinations = Provider.of<Destinations>(context);
-    var destinationsList = destinations.destinations;
+    var destinationsList = destinations.getDestinations;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Destinations"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: TextField(
+          decoration: InputDecoration(
+              hintText: "Search Destination",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none
+              ),
+              filled: true,
+              fillColor: Colors.black12,
+              isDense: true,
+              contentPadding: EdgeInsets.all(8)),
+        ),
+        iconTheme: new IconThemeData(color: Colors.purple),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+            color: Colors.purple,
+          ),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () {},
+            color: Colors.purple,
+          ),
+        ],
       ),
       body: _isLoading
           ? Center(
@@ -43,8 +70,12 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : Container(
               child: ListView.builder(
-                itemBuilder: (ctx, index) =>
-                    Text(destinationsList[index].title),
+                itemBuilder: (ctx, index) => DestinationItem(
+                    destinationsList[index].id,
+                    destinationsList[index].title,
+                    destinationsList[index].imageUrls[0]['url'],
+                    destinationsList[index].city,
+                    destinationsList[index].likedUsers.length),
                 itemCount: destinationsList.length,
               ),
             ),
