@@ -19,7 +19,10 @@ class SideDrawerState extends State<SideDrawer> {
 
   void logout() {
     FirebaseAuth.instance.signOut();
-     Provider.of<Auth>(context, listen: false).deleteUserId();
+    Provider.of<Auth>(context, listen: false).deleteUserId();
+    Navigator.of(context).pushNamed(
+      '/login',
+    );
   }
 
   @override
@@ -48,6 +51,7 @@ class SideDrawerState extends State<SideDrawer> {
             ),
           ),
           ListTile(
+            leading: Icon(Icons.location_searching, color: Theme.of(context).primaryColor,),
             title: Text(
               'Destinations',
               style: TextStyle(
@@ -56,12 +60,13 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (BuildContext context) => HomeScreen())
+              Navigator.of(context).pushNamed(
+                '/homescreen',
               );
             },
           ),
           ListTile(
+            leading: Icon(Icons.plus_one, color: Theme.of(context).primaryColor,),
             title: Text(
               'Add Destinations',
               style: TextStyle(
@@ -70,12 +75,13 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (BuildContext context) => AddDestination())
+              Navigator.of(context).pushNamed(
+                '/adddestination',
               );
             },
           ),
           ListTile(
+            leading: Icon(Icons.lock_open, color: Theme.of(context).primaryColor,),
             title: Text(
               'Change my password',
               style: TextStyle(
@@ -88,6 +94,7 @@ class SideDrawerState extends State<SideDrawer> {
             },
           ),
           ListTile(
+            leading: Icon(Icons.exit_to_app, color: Theme.of(context).primaryColor,),
             title: Text(
               'Log out',
               style: TextStyle(

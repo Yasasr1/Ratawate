@@ -163,7 +163,7 @@ class AddDestinationState extends State<AddDestination> {
     setState(() {
       _isLoading = false;
     });
-    _showDialog("Destination Added","Success");
+    _showDialog("Destination will be added after verifying it by the system","Success");
 
     
   }
@@ -199,7 +199,13 @@ class AddDestinationState extends State<AddDestination> {
       body: Builder(
         builder: (context) => Form(
           key: _formKey,
-          child: Padding(
+          child: _isLoading == true
+              ? Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.purple,
+            ),
+          )
+              :Padding(
             padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
             child: ListView(
               children: <Widget>[
@@ -517,13 +523,7 @@ class AddDestinationState extends State<AddDestination> {
                       ),
 
                       //Add Button
-                      _isLoading == true
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.purple,
-                              ),
-                            )
-                          : Expanded(
+                       Expanded(
                               child: RaisedButton(
                                 color: Theme.of(context).primaryColor,
                                 textColor: Theme.of(context).accentColor,
