@@ -46,15 +46,15 @@ class LoginState extends State<Login> {
       isLoading = true;
     });
     try {
-    authResult = await _auth.signInWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
-    Provider.of<Auth>(context, listen: false).setUserId(authResult.user.uid);
+      authResult = await _auth.signInWithEmailAndPassword(
+          email: usernameController.text, password: passwordController.text);
+      Provider.of<Auth>(context, listen: false).setUserId(authResult.user.uid);
     } on PlatformException catch (err) {
       var message = "An error occured, Please check your credentials!";
-      if(err.message != null) {
+      if (err.message != null) {
         message = err.message;
       }
       _showErrorDialog(message);
-
     } catch (err) {
       print(err);
     }
@@ -201,11 +201,9 @@ class LoginState extends State<Login> {
                         textScaleFactor: 1.5,
                       ),
                       onPressed: () {
-                        setState(() {
-                          if (_formKey.currentState.validate()) {
-                            login();
-                          }
-                        });
+                        if (_formKey.currentState.validate()) {
+                          login();
+                        }
                       },
                     ),
                   ),

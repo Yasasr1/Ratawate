@@ -1,8 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rasthiyaduwa_app/app_screens/add_destination.dart';
+import 'package:rasthiyaduwa_app/app_screens/home_screen.dart';
+import '../app_screens/login.dart';
 import 'package:provider/provider.dart';
-import 'package:rasthiyaduwa_app/providers/auth.dart';
+
+import '../providers/auth.dart';
+
 
 class SideDrawer extends StatefulWidget {
   @override
@@ -12,6 +17,10 @@ class SideDrawer extends StatefulWidget {
 class SideDrawerState extends State<SideDrawer> {
 
 
+  void logout() {
+    FirebaseAuth.instance.signOut();
+     Provider.of<Auth>(context, listen: false).deleteUserId();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +56,8 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushNamed(
-                '/homescreen',
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (BuildContext context) => HomeScreen())
               );
             },
           ),
@@ -61,8 +70,8 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushNamed(
-                '/adddestination',
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (BuildContext context) => AddDestination())
               );
             },
           ),
@@ -86,9 +95,7 @@ class SideDrawerState extends State<SideDrawer> {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            onTap: () {
-              FirebaseAuth.instance.signOut();
-            },
+            onTap: logout,
           ),
         ],
       ),

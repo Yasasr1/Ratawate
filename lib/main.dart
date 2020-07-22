@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:rasthiyaduwa_app/app_screens/destination_details_screen.dart';
 import 'package:rasthiyaduwa_app/app_screens/register.dart';
 import 'package:rasthiyaduwa_app/app_screens/splash_screen.dart';
 import 'package:rasthiyaduwa_app/providers/destinations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import './app_screens/login.dart';
 import 'package:provider/provider.dart';
 
@@ -23,19 +23,19 @@ class MyApp extends StatelessWidget {
             value: Auth(),
           ),
           ChangeNotifierProvider.value(
-           value: Destinations(),
-          ),
+           value: Destinations()),
         ],
         child: Consumer<Auth>(
           builder: (ctx, auth, _) => MaterialApp(
             debugShowCheckedModeBanner: false,
             title: "RataWate",
-            home: StreamBuilder(stream: FirebaseAuth.instance.onAuthStateChanged, builder: (ctx, userSnapshot) {
-              if(userSnapshot.hasData) {
+            home: StreamBuilder(stream: FirebaseAuth.instance.onAuthStateChanged, builder:(ctx, userSnapShot) {
+              if (userSnapShot.hasData) {
                 return HomeScreen();
+              } else {
+                return Login();
               }
-              return Login();
-            }),
+            } ,),
             theme: ThemeData(
               iconTheme: IconThemeData(color: Colors.purple),
               brightness: Brightness.light,

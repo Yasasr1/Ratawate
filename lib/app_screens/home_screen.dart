@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rasthiyaduwa_app/providers/destinations.dart';
 import 'package:rasthiyaduwa_app/widgets/destination_item.dart';
+import 'package:rasthiyaduwa_app/widgets/filter_modal.dart';
 import './side_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var _isLoading = false;
+  String searchTerm;
 
   @override
   void initState() {
@@ -27,6 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  void showFilterModal(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (bctx) {
+          return FilterModal();
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     var destinations = Provider.of<Destinations>(context);
@@ -37,12 +47,16 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: TextField(
+          onChanged: (value) {
+            setState(() {
+              searchTerm = value;
+            });
+          },
           decoration: InputDecoration(
               hintText: "Search Destination",
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none
-              ),
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none),
               filled: true,
               fillColor: Colors.black12,
               isDense: true,
@@ -52,12 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<Destinations>(context).setSearchTerm(searchTerm);
+            },
             color: Colors.purple,
           ),
           IconButton(
             icon: Icon(Icons.filter_list),
-            onPressed: () {},
+            onPressed: () {
+              showFilterModal(context);
+            },
             color: Colors.purple,
           ),
         ],

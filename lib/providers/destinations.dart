@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 import '../providers/destination.dart';
 
 class Destinations with ChangeNotifier {
   List<Destination> _destinations = [];
+  String _district = 'All';
+  String _destinationType = 'All';
+  String _searchTerm = '';
   Destinations();
 
   Future<void> fetchDestinations() async {
@@ -35,23 +36,23 @@ class Destinations with ChangeNotifier {
     }*/
     try {
       final List<Destination> loadedDestinations = [];
-      /*final responce =
+      final responce =
           await Firestore.instance.collection("destinations").getDocuments();
       responce.documents.forEach((document) {
         loadedDestinations.add(Destination(
-          id: document.documentID,
-          title: document['title'],
-          description: document['description'],
-          city: document['city'],
-          district: document['district'],
-          destinationType: document['destinationType'],
-          imageUrls: document['imageUrls'],
-          latitude: document['latitude'],
-          longitude: document['longitude'],
-          likedUsers: document['likedUsers'],
-        ));
-      });*/
-      Firestore.instance.collection("destinations").snapshots().listen((data) {
+            id: document.documentID,
+            title: document['title'],
+            description: document['description'],
+            city: document['city'],
+            district: document['district'],
+            destinationType: document['destinationType'],
+            imageUrls: document['imageUrls'],
+            latitude: document['latitude'],
+            longitude: document['longitude'],
+            likedUsers: document['likedUsers'],
+            isVerified: document['isVerified']));
+      });
+      /*Firestore.instance.collection("destinations").snapshots().listen((data) {
         data.documents.forEach((document) {
           loadedDestinations.add(Destination(
             id: document.documentID,
@@ -67,7 +68,7 @@ class Destinations with ChangeNotifier {
             isVerified: document['isVerified']
           ));
         });
-      });
+      });*/
       _destinations = loadedDestinations;
       notifyListeners();
     } catch (err) {
@@ -75,8 +76,48 @@ class Destinations with ChangeNotifier {
     }
   }
 
+  void setFilters(String dType, String dis) {
+    _district = dis;
+    _destinationType = dType;
+    notifyListeners();
+  }
+
+  void setSearchTerm(String sTerm) {
+    _searchTerm = sTerm;
+    notifyListeners();
+  }
+
+  String getType() {
+    return _destinationType;
+  }
+
+  String getDistrict() {
+    return _district;
+  }
+
   List<Destination> get getDestinations {
-    return [..._destinations];
+    var allDestinations = [..._destinations];
+    List<Destination> searchResults;
+    List<Destination> filteredByDistrict;
+    List<Destination> filteredByType;
+    if (_district.compareTo('All') != 0) {
+      filteredByDistrict = allDestinations
+          .where((destination) => destination.district == _district)
+          .toList();
+      allDestinations = filteredByDistrict;
+    }
+    if (_destinationType.compareTo('All') != 0) {
+      filteredByType= allDestinations
+          .where((destination) => destination.destinationType == _destinationType)
+          .toList();
+      allDestinations = filteredByType;
+    }
+    if(_searchTerm.length != 0) {
+      searchResults = allDestinations.where((element) => element.title.toLowerCase().contains(_searchTerm.toLowerCase())).toList();
+      return searchResults;
+    }
+    return allDestinations;
+    
   }
 
   Destination getById(String id) {

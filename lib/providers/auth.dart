@@ -7,18 +7,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
-  String _userId;
+  String _token;
+  DateTime _expiryDate;
+  String _userId = null;
 
-  void setUserId(String id) {
+
+ void setUserId(String id) {
     _userId = id;
+    notifyListeners();
   }
 
   String getUserId(){
     return _userId;
   }
 
-  /*bool get isAuth {
-    return token != null;
+  void deleteUserId() {
+    _userId = null;
+    notifyListeners();
+  }
+
+  bool get isAuth {
+    return _userId != null;
   }
 
   String get token {
@@ -104,5 +113,5 @@ class Auth with ChangeNotifier {
     _userId = null;
     _expiryDate = null;
     notifyListeners();
-  }*/
+  }
 }
