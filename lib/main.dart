@@ -46,7 +46,8 @@ class MyApp extends StatelessWidget {
               '/register': (context) => Register(),
               '/homescreen': (context) => HomeScreen(),
               '/adddestination': (context) => AddDestination(),
-              '/destinationDetails': (context) => DestinationDetailsScreen()
+              '/destinationDetails': (context) => DestinationDetailsScreen(),
+              '/login': (context) => Login()
             },
           ),
         ));

@@ -71,7 +71,9 @@ class AddDestinationState extends State<AddDestination> {
         }),
       );
     else
-      return Container(color: Colors.white);
+      return Container(
+          color: Colors.white,
+      );
   }
 
   //select and load images
@@ -161,7 +163,7 @@ class AddDestinationState extends State<AddDestination> {
     setState(() {
       _isLoading = false;
     });
-    _showDialog("Destination Added","Success");
+    _showDialog("Destination will be added after verifying it by the system","Success");
 
     
   }
@@ -177,7 +179,7 @@ class AddDestinationState extends State<AddDestination> {
           textColor: Colors.cyan,
           label: "YES",
           onPressed: () {
-            //add destination
+            submitDestination();
             _reset();
           }),
     );
@@ -197,7 +199,13 @@ class AddDestinationState extends State<AddDestination> {
       body: Builder(
         builder: (context) => Form(
           key: _formKey,
-          child: Padding(
+          child: _isLoading == true
+              ? Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.purple,
+            ),
+          )
+              :Padding(
             padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
             child: ListView(
               children: <Widget>[
@@ -218,6 +226,8 @@ class AddDestinationState extends State<AddDestination> {
                         type = value;
                       });
                     },
+                    validator: (value) => value == null
+                        ? 'Please select a type' : null,
                     dataSource: [
                       {
                         "display": "Beach",
@@ -274,6 +284,8 @@ class AddDestinationState extends State<AddDestination> {
                         district = value;
                       });
                     },
+                    validator: (value) => value == null
+                        ? 'Please select a district' : null,
                     dataSource: [
                       {
                         "display": "Ampara",
@@ -416,7 +428,10 @@ class AddDestinationState extends State<AddDestination> {
                     controller: cityController,
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return 'Please enter a Title';
+                        return 'Please enter a City';
+                      }
+                      else if(this.images.length == 0){
+                        return 'Please select at least 1 image';
                       }
                       return null;
                     },
@@ -472,7 +487,7 @@ class AddDestinationState extends State<AddDestination> {
                     controller: descriptionController,
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return 'Please enter a Title';
+                        return 'Please enter a Description';
                       }
                       return null;
                     },
@@ -508,13 +523,7 @@ class AddDestinationState extends State<AddDestination> {
                       ),
 
                       //Add Button
-                      _isLoading == true
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.purple,
-                              ),
-                            )
-                          : Expanded(
+                       Expanded(
                               child: RaisedButton(
                                 color: Theme.of(context).primaryColor,
                                 textColor: Theme.of(context).accentColor,
@@ -522,7 +531,13 @@ class AddDestinationState extends State<AddDestination> {
                                   'Add',
                                   textScaleFactor: 1.5,
                                 ),
-                                onPressed: submitDestination,
+                                onPressed: () {
+                                  setState(() {
+                                    if (_formKey.currentState.validate()) {
+                                      showSnackBar(context);
+                                    }
+                                  });
+                                },
                               ),
                             ),
                     ],
