@@ -49,6 +49,8 @@ class LoginState extends State<Login> {
       authResult = await _auth.signInWithEmailAndPassword(
           email: usernameController.text, password: passwordController.text);
       Provider.of<Auth>(context, listen: false).setUserId(authResult.user.uid);
+      Provider.of<Auth>(context, listen: false).setEmail(authResult.user.email);
+      print(authResult.user.email);
     } on PlatformException catch (err) {
       var message = "An error occured, Please check your credentials!";
       if (err.message != null) {
@@ -211,21 +213,25 @@ class LoginState extends State<Login> {
                 Container(
                   margin: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.1, vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      style: defaultStyle,
-                      children: <TextSpan>[
-                        TextSpan(text: "Dont't have an account? "),
-                        TextSpan(
-                            text: 'Register',
-                            style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).pushNamed(
-                                  '/register',
-                                );
-                              }),
-                      ],
+                  child: Center(
+                    child: Text(
+                      "Don't have an account?",
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.1, vertical: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/register');
+                    },
+                    child: Center(
+                      child: Text(
+                        "Register",
+                        style: TextStyle(fontSize: 20, color: Colors.purple),
+                      ),
                     ),
                   ),
                 ),

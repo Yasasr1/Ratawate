@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 class DestinationItem extends StatelessWidget {
+  final bool _verified;
   final String _id;
   final String _title;
   final String _image;
   final String _district;
   final int _likes;
 
-  DestinationItem(this._id,this._title, this._image, this._district, this._likes);
+  DestinationItem(this._verified, this._id, this._title, this._image,
+      this._district, this._likes);
 
   navigateToDetailsScreen(BuildContext context) {
     Navigator.of(context).pushNamed('/destinationDetails', arguments: _id);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +31,27 @@ class DestinationItem extends StatelessWidget {
         children: <Widget>[
           Stack(
             children: <Widget>[
-              Image.network(
-                _image,
-                height: 320,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              !_verified
+                  ? Container(
+                      decoration: BoxDecoration(color: Colors.grey),
+                      height: 320,
+                      child: Center(
+                        child: Text(
+                          "Unverified Destination. Images will be displayed after verification",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Image.network(
+                      _image,
+                      height: 320,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
               Container(
                 child: Text(
                   _title,

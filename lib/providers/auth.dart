@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,7 @@ class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
   String _userId = null;
+  String _email = '';
 
 //
 // ONLY _userId, setUserId, getUserId and deleteUserId are used in this provider 
@@ -23,8 +25,24 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
+  void fetchUserId() {
+    FirebaseAuth.instance.currentUser().then((value) => {
+      _userId =  value.uid
+    });
+  }
+
+  
+ void setEmail(String email) {
+    _email = email;
+    notifyListeners();
+  }
+
   String getUserId(){
     return _userId;
+  }
+
+  String getEmail(){
+    return _email;
   }
 
   void deleteUserId() {

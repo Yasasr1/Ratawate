@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rasthiyaduwa_app/providers/destinations.dart';
-import 'package:rasthiyaduwa_app/widgets/destination_item.dart';
-import 'package:rasthiyaduwa_app/widgets/filter_modal.dart';
+
+import '../providers/destinations.dart';
+import '../widgets/destination_item.dart';
+import '../widgets/filter_modal.dart';
 import './side_drawer.dart';
+import '../providers/auth.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -25,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
           _isLoading = false;
         });
       });
+      
+      Provider.of<Auth>(context).fetchUserId();
     });
     super.initState();
   }
@@ -89,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : Container(
               child: ListView.builder(
                 itemBuilder: (ctx, index) => DestinationItem(
+                    destinationsList[index].isVerified,
                     destinationsList[index].id,
                     destinationsList[index].title,
                     destinationsList[index].imageUrls[0],

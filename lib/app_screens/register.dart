@@ -47,6 +47,7 @@ class RegisterState extends State<Register> {
     });
      try {
     authResult = await _auth.createUserWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
+    Navigator.of(context).pushNamed('/homescreen');
     } on PlatformException catch (err) {
       var message = "An error occured, Please check your credentials!";
       if(err.message != null) {
@@ -68,13 +69,19 @@ class RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.title;
+    AssetImage assetImage = AssetImage('images/logo.png');
+    Image image = Image(
+      image: assetImage,
+      width: 150.0,
+      height: 150.0,
+    );
     var _mediaQueryData = MediaQuery.of(context);
     var screenWidth = _mediaQueryData.size.width;
     TextStyle defaultStyle = TextStyle(color: Colors.grey, fontSize: 20.0);
     TextStyle linkStyle = TextStyle(color: Theme.of(context).primaryColor);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Join with us'),
+        title: Text('Join us!'),
       ),
       body: Builder(
         builder: (context) => Form(
@@ -83,7 +90,13 @@ class RegisterState extends State<Register> {
             padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
             child: ListView(
               children: <Widget>[
-                Container(height: 115),
+                Container(height: 50),
+                Container(height: 50),
+                Center(
+                  child: Container(
+                    child: image,
+                  ),
+                ),
 
                 //Username Field
                 Container(
@@ -104,7 +117,7 @@ class RegisterState extends State<Register> {
                       debugPrint('Something changed in Text Field');
                     },
                     decoration: InputDecoration(
-                        labelText: 'bb',
+                        labelText: 'Email',
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(top: 0),
                           // add padding to adjust icon
