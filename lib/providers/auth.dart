@@ -11,6 +11,12 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId = null;
 
+//
+// ONLY _userId, setUserId, getUserId and deleteUserId are used in this provider 
+//
+// Non of the other methods or params are used after shifting from firebase REST auth.
+//
+
 
  void setUserId(String id) {
     _userId = id;

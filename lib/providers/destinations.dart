@@ -11,6 +11,7 @@ class Destinations with ChangeNotifier {
   Destinations();
 
   Future<void> fetchDestinations() async {
+    //Get destinations using realtime database - not used anymore
     /*final url = "https://ratawate-6221a.firebaseio.com/destinations.json?auth=$authToken";
     try {
       final responce = await http.get(url);
@@ -52,6 +53,7 @@ class Destinations with ChangeNotifier {
             likedUsers: document['likedUsers'],
             isVerified: document['isVerified']));
       });
+      //If listening to realtime updates on firestore - currently only getting data once
       /*Firestore.instance.collection("destinations").snapshots().listen((data) {
         data.documents.forEach((document) {
           loadedDestinations.add(Destination(
@@ -95,6 +97,7 @@ class Destinations with ChangeNotifier {
     return _district;
   }
 
+  //return the destinations - considering filters and search terms
   List<Destination> get getDestinations {
     var allDestinations = [..._destinations];
     List<Destination> searchResults;
@@ -107,17 +110,22 @@ class Destinations with ChangeNotifier {
       allDestinations = filteredByDistrict;
     }
     if (_destinationType.compareTo('All') != 0) {
-      filteredByType= allDestinations
-          .where((destination) => destination.destinationType == _destinationType)
+      filteredByType = allDestinations
+          .where(
+              (destination) => destination.destinationType == _destinationType)
           .toList();
       allDestinations = filteredByType;
     }
-    if(_searchTerm.length != 0) {
-      searchResults = allDestinations.where((element) => element.title.toLowerCase().contains(_searchTerm.toLowerCase())).toList();
-      return searchResults;
+    if (_searchTerm != null) {
+      if (_searchTerm.length != 0) {
+        searchResults = allDestinations
+            .where((element) =>
+                element.title.toLowerCase().contains(_searchTerm.toLowerCase()))
+            .toList();
+        return searchResults;
+      }
     }
     return allDestinations;
-    
   }
 
   Destination getById(String id) {
