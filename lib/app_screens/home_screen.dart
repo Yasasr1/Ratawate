@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       
       Provider.of<Auth>(context).fetchUserId();
+      Provider.of<Auth>(context).fetchEmail();
     });
     super.initState();
   }

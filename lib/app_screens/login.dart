@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../providers/auth.dart';
-import '../models/http_exception.dart';
 
 class Login extends StatefulWidget {
   @override

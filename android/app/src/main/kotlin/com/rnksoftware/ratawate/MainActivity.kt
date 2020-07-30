@@ -1,4 +1,4 @@
-package com.example.rasthiyaduwa_app
+package com.rnksoftware.ratawate
 
 import io.flutter.embedding.android.FlutterActivity
 

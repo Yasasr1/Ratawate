@@ -31,6 +31,12 @@ class Auth with ChangeNotifier {
     });
   }
 
+   void fetchEmail() {
+    FirebaseAuth.instance.currentUser().then((value) => {
+      _email = value.email
+    });
+  }
+
   
  void setEmail(String email) {
     _email = email;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:provider/provider.dart';
 
-import 'package:rasthiyaduwa_app/providers/destinations.dart';
+import '../providers/destinations.dart';
 
 class FilterModal extends StatefulWidget {
   @override

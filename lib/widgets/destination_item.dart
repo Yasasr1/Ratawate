@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DestinationItem extends StatelessWidget {
   final bool _verified;
@@ -46,11 +47,23 @@ class DestinationItem extends StatelessWidget {
                         ),
                       ),
                     )
-                  : Image.network(
-                      _image,
+                  : CachedNetworkImage(
                       height: 320,
                       width: double.infinity,
                       fit: BoxFit.cover,
+                      imageUrl: _image,
+                      placeholder: (context, url) => Container(
+                        height: 320,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: Colors.grey),
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        height: 320,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: Colors.grey),
+                        child: Text("Failed to load image..."),
+                      ),
                     ),
               Container(
                 child: Text(

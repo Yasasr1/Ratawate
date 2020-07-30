@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:rasthiyaduwa_app/providers/auth.dart';
 import '../providers/destination.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../providers/destinations.dart';
 
@@ -102,9 +102,28 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                                   margin: EdgeInsets.symmetric(horizontal: 5.0),
                                   decoration: BoxDecoration(color: Colors.grey),
                                   child: fetchedDestination.isVerified
-                                      ? Image.network(
-                                          image,
+                                      ? CachedNetworkImage(
+                                          height: 320,
+                                          width: double.infinity,
                                           fit: BoxFit.cover,
+                                          imageUrl: image,
+                                          placeholder: (context, url) =>
+                                              Container(
+                                            height: 320,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey),
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Container(
+                                            height: 320,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey),
+                                            child:
+                                                Text("Failed to load image..."),
+                                          ),
                                         )
                                       : Container(
                                           child: Center(
@@ -123,20 +142,25 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                         }).toList(),
                       ),
                     ),
-                     Container(
+                    Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Column(
                         children: <Widget>[
-                          !fetchedDestination.isVerified ? Icon(Icons.warning) : Icon(Icons.done, color: Colors.green),
-                          !fetchedDestination.isVerified ?  Text(
-                              "This destination is not yet verified. And may be deleted if it dosen't adhere to our guidlines") : Text(
-                              "Verified Destination"),
+                          !fetchedDestination.isVerified
+                              ? Icon(Icons.warning)
+                              : Icon(Icons.done, color: Colors.green),
+                          !fetchedDestination.isVerified
+                              ? Text(
+                                  "This destination is not yet verified. And may be deleted if it dosen't adhere to our guidlines")
+                              : Text("Verified Destination"),
                         ],
                       ),
                       margin: EdgeInsets.all(20),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          color: fetchedDestination.isVerified ? Colors.green[100] : Colors.purple[200],
+                          color: fetchedDestination.isVerified
+                              ? Colors.green[100]
+                              : Colors.purple[200],
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     Container(
