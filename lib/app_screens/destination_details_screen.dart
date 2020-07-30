@@ -60,6 +60,7 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
           .collection('destinations')
           .document(id)
           .updateData({'likedUsers': fetchedDestination.likedUsers});
+      Provider.of<Destinations>(context).fetchDestinations();
     } catch (err) {
       print(err);
     }
