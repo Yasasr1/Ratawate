@@ -7,22 +7,18 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
 
-
 class SideDrawer extends StatefulWidget {
   @override
   SideDrawerState createState() => SideDrawerState();
 }
 
 class SideDrawerState extends State<SideDrawer> {
-
-
-
   void logout() {
     FirebaseAuth.instance.signOut();
     Provider.of<Auth>(context, listen: false).deleteUserId();
-    
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +47,10 @@ class SideDrawerState extends State<SideDrawer> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.location_searching, color: Theme.of(context).primaryColor,),
+            leading: Icon(
+              Icons.location_searching,
+              color: Theme.of(context).primaryColor,
+            ),
             title: Text(
               'Destinations',
               style: TextStyle(
@@ -60,11 +59,15 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => HomeScreen()));
             },
           ),
           ListTile(
-            leading: Icon(Icons.plus_one, color: Theme.of(context).primaryColor,),
+            leading: Icon(
+              Icons.plus_one,
+              color: Theme.of(context).primaryColor,
+            ),
             title: Text(
               'Add Destinations',
               style: TextStyle(
@@ -73,7 +76,8 @@ class SideDrawerState extends State<SideDrawer> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => AddDestination()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => AddDestination()));
             },
           ),
           /*ListTile(
@@ -90,7 +94,10 @@ class SideDrawerState extends State<SideDrawer> {
             },
           ),*/
           ListTile(
-            leading: Icon(Icons.exit_to_app, color: Theme.of(context).primaryColor,),
+            leading: Icon(
+              Icons.exit_to_app,
+              color: Theme.of(context).primaryColor,
+            ),
             title: Text(
               'Log out',
               style: TextStyle(
