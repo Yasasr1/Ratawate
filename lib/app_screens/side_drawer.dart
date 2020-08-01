@@ -17,7 +17,7 @@ class SideDrawerState extends State<SideDrawer> {
     FirebaseAuth.instance.signOut();
     Provider.of<Auth>(context, listen: false).deleteUserId();
     Navigator.of(context)
-        .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
 
   @override
