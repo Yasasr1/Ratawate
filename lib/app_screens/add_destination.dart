@@ -178,10 +178,7 @@ class AddDestinationState extends State<AddDestination> {
           textColor: Colors.cyan,
           label: "YES",
           onPressed: () {
-            submitDestination().then((_) => {
-              _reset()
-            });
-            
+            submitDestination().then((_) => {_reset()});
           }),
     );
     Scaffold.of(context).showSnackBar(snackBar);
@@ -465,8 +462,8 @@ class AddDestinationState extends State<AddDestination> {
                           children: <Widget>[
                             Expanded(
                               child: RaisedButton(
-                                color: Theme.of(context).primaryColor,
-                                textColor: Theme.of(context).accentColor,
+                                color: Theme.of(context).accentColor,
+                                textColor: Colors.black54,
                                 child: Text(
                                   'Add Images',
                                   textScaleFactor: 1.5,
