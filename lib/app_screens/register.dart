@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
 
@@ -15,6 +14,7 @@ class Register extends StatefulWidget {
 class RegisterState extends State<Register> {
   var _formKey = GlobalKey<FormState>();
 
+  TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   var isLoading = false;
@@ -43,25 +43,30 @@ class RegisterState extends State<Register> {
     setState(() {
       isLoading = true;
     });
-     try {
-    authResult = await _auth.createUserWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
-    Navigator.of(context).pushNamed('/homescreen');
+    try {
+      authResult = await _auth.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      Navigator.of(context).pushNamed('/homescreen');
+      final FirebaseUser user = await _auth.currentUser();
+      final uid = user.uid;
+      var response = await Firestore.instance.collection('users').add({
+        'uid': uid,
+        'username': usernameController.text,
+        'score': 0,
+      });
     } on PlatformException catch (err) {
       var message = "An error occured, Please check your credentials!";
-      if(err.message != null) {
+      if (err.message != null) {
         message = err.message;
       }
       _showErrorDialog(message);
-
     } catch (err) {
       print(err);
     }
 
-   
     setState(() {
       isLoading = false;
     });
-   
   }
 
   @override
@@ -89,14 +94,56 @@ class RegisterState extends State<Register> {
             child: ListView(
               children: <Widget>[
                 Container(height: 50),
-                Container(height: 50),
                 Center(
                   child: Container(
                     child: image,
                   ),
                 ),
 
-                //Username Field
+                //Email Field
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.1, vertical: 8.0),
+                  child: TextFormField(
+                    controller: emailController,
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return "Email can't be empty";
+                      }
+                      return null;
+                    },
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onChanged: (value) {
+                      debugPrint('Something changed in Text Field');
+                    },
+                    decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.only(top: 0),
+                          // add padding to adjust icon
+                          child: Icon(
+                            Icons.perm_identity,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                              width: 2.0),
+                          borderRadius: BorderRadius.circular(35.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(35.0),
+                        )),
+                  ),
+                ),
+
+                //Username
                 Container(
                   margin: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.1, vertical: 8.0),
@@ -115,7 +162,7 @@ class RegisterState extends State<Register> {
                       debugPrint('Something changed in Text Field');
                     },
                     decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'Username',
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(top: 0),
                           // add padding to adjust icon
