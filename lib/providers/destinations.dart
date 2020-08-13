@@ -51,7 +51,9 @@ class Destinations with ChangeNotifier {
             latitude: document['latitude'],
             longitude: document['longitude'],
             likedUsers: document['likedUsers'],
-            isVerified: document['isVerified']));
+            isVerified: document['isVerified'],
+            userId: document['userId'],
+            ));
       });
       //If listening to realtime updates on firestore - currently only getting data once
       /*Firestore.instance.collection("destinations").snapshots().listen((data) {

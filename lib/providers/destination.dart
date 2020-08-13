@@ -12,6 +12,7 @@ class Destination with ChangeNotifier {
   String district;
   String destinationType;
   bool isVerified;
+  String userId;
 
   Destination(
       {this.id,
@@ -24,7 +25,8 @@ class Destination with ChangeNotifier {
       this.city,
       this.district,
       this.destinationType,
-      this.isVerified
+      this.isVerified,
+      this.userId
       });
 }
 

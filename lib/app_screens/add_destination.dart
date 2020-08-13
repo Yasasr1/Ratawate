@@ -7,8 +7,10 @@ import 'dart:math';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
 
 import './side_drawer.dart';
+import '../providers/auth.dart';
 
 class AddDestination extends StatefulWidget {
   @override
@@ -145,6 +147,8 @@ class AddDestinationState extends State<AddDestination> {
         imageUrls = urls;
       });
 
+      var uid = Provider.of<Auth>(context, listen: false).getUserId();
+
       var responce = await Firestore.instance.collection('destinations').add({
         'title': titleController.text,
         'description': descriptionController.text,
@@ -153,7 +157,8 @@ class AddDestinationState extends State<AddDestination> {
         'city': cityController.text,
         'district': district,
         'destinationType': type,
-        'isVerified': false
+        'isVerified': false,
+        'userId': uid
       });
       print(districtController.text);
     } catch (err) {
@@ -190,7 +195,7 @@ class AddDestinationState extends State<AddDestination> {
       appBar: AppBar(
         title: Text(
           'Add a new destination',
-          style: TextStyle(color: Theme.of(context).primaryColor),
+          style: TextStyle(color: Colors.white),
         ),
       ),
       drawer: SideDrawer(),
