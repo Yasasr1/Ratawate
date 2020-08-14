@@ -183,11 +183,18 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            fetchedDestination.likedUsers.length.toString(),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
+                          (fetchedDestination.likedUsers.length == 1)
+                              ? Text(
+                                  "This destination only has 1 like",
+                                  style: TextStyle(fontSize: 15),
+                                )
+                              : Text(
+                                  "This destination has " +
+                                      fetchedDestination.likedUsers.length
+                                          .toString() +
+                                      " likes",
+                                  style: TextStyle(fontSize: 15),
+                                ),
                           SizedBox(
                             width: 20,
                           ),
@@ -203,7 +210,6 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(20),
                       child: Text(
                         fetchedDestination.description,
                       ),
@@ -216,6 +222,12 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                           color: Colors.grey),
                     ),
                     Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: EdgeInsets.all(2),
+                      margin: EdgeInsets.only(top: 0.0, bottom: 35.0),
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(10)),
                       height: 300,
                       child: DisplayLocation(fetchedDestination.latitude,
                           fetchedDestination.longitude),
