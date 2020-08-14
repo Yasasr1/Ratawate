@@ -140,10 +140,9 @@ class AddDestinationState extends State<AddDestination> {
   }
 
   Future submitDestination() async {
-    if(!isLocationPicked) {
+    if (!isLocationPicked) {
       _showDialog(
-        "Please pick a location from the map",
-        "Location Not Picked!");
+          "Please pick a location from the map", "Location Not Picked!");
       return;
     }
     setState(() {
@@ -210,7 +209,6 @@ class AddDestinationState extends State<AddDestination> {
       long = longitude;
       isLocationPicked = true;
     });
-    
   }
 
   @override
@@ -515,6 +513,9 @@ class AddDestinationState extends State<AddDestination> {
                             if (value.isEmpty) {
                               return 'Please enter a Description';
                             }
+                            if (lat == null) {
+                              return 'Please pick the location from the map';
+                            }
                             return null;
                           },
                           onChanged: (value) {
@@ -528,8 +529,8 @@ class AddDestinationState extends State<AddDestination> {
 
                       Center(
                         heightFactor: 2,
-                        child:
-                            Text("Pick location of the destination from the map"),
+                        child: Text(
+                            "Pick location of the destination from the map"),
                       ),
 
                       Container(
