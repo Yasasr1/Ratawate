@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rasthiyaduwa_app/providers/auth.dart';
+import 'package:rasthiyaduwa_app/widgets/display_location.dart';
 import '../providers/destination.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -206,7 +207,11 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                       child: Text(
                         fetchedDestination.description,
                       ),
-                    )
+                    ),
+                    Container(
+                      height: 300,
+                      child: DisplayLocation(fetchedDestination.latitude, fetchedDestination.longitude),
+                    ),
                   ],
                 ),
               ),
