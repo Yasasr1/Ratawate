@@ -238,7 +238,7 @@ class RegisterState extends State<Register> {
                     obscureText: true,
                     validator: (String value) {
                       if (value != passwordController.text) {
-                        return "Passwords does not match";
+                        return "Passwords do not match";
                       }
                       return null;
                     },

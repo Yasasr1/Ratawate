@@ -208,9 +208,17 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                         fetchedDestination.description,
                       ),
                     ),
+                    Text(
+                      "Destination location",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
+                    ),
                     Container(
                       height: 300,
-                      child: DisplayLocation(fetchedDestination.latitude, fetchedDestination.longitude),
+                      child: DisplayLocation(fetchedDestination.latitude,
+                          fetchedDestination.longitude),
                     ),
                   ],
                 ),
