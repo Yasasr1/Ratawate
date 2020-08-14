@@ -8,6 +8,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:rasthiyaduwa_app/widgets/location_picker.dart';
 
 import './side_drawer.dart';
 import '../providers/auth.dart';
@@ -20,6 +21,9 @@ class AddDestination extends StatefulWidget {
 class AddDestinationState extends State<AddDestination> {
   String type;
   String district;
+  double lat;
+  double long;
+  bool isLocationPicked;
 
   var _formKey = GlobalKey<FormState>();
 
@@ -28,6 +32,7 @@ class AddDestinationState extends State<AddDestination> {
     super.initState();
     type = '';
     district = '';
+    isLocationPicked = false;
   }
 
   TextEditingController titleController = TextEditingController();
@@ -60,7 +65,7 @@ class AddDestinationState extends State<AddDestination> {
 
   //render selected images as a grid
   Widget buildGridView() {
-    if (images != null)
+    if (images.length > 0)
       return GridView.count(
         crossAxisCount: 3,
         children: List.generate(images.length, (index) {
@@ -74,7 +79,9 @@ class AddDestinationState extends State<AddDestination> {
       );
     else
       return Container(
-        color: Colors.white,
+        width: double.infinity,
+        color: Colors.grey[300],
+        child: Center(child: Text("No images selected...")),
       );
   }
 
@@ -133,6 +140,12 @@ class AddDestinationState extends State<AddDestination> {
   }
 
   Future submitDestination() async {
+    if(!isLocationPicked) {
+      _showDialog(
+        "Please pick a location from the map",
+        "Location Not Picked!");
+      return;
+    }
     setState(() {
       _isLoading = true;
     });
@@ -158,7 +171,9 @@ class AddDestinationState extends State<AddDestination> {
         'district': district,
         'destinationType': type,
         'isVerified': false,
-        'userId': uid
+        'userId': uid,
+        'latitude': lat,
+        'longitude': long
       });
       print(districtController.text);
     } catch (err) {
@@ -187,6 +202,15 @@ class AddDestinationState extends State<AddDestination> {
           }),
     );
     Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  void setLocation(double latitude, double longitude) {
+    setState(() {
+      lat = latitude;
+      long = longitude;
+      isLocationPicked = true;
+    });
+    
   }
 
   @override
@@ -462,7 +486,7 @@ class AddDestinationState extends State<AddDestination> {
 
                       //Image Field
                       Padding(
-                        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                        padding: EdgeInsets.only(top: 15.0, bottom: 2.0),
                         child: Row(
                           children: <Widget>[
                             Expanded(
@@ -482,7 +506,7 @@ class AddDestinationState extends State<AddDestination> {
 
                       //Description Field
                       Padding(
-                        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                         child: TextFormField(
                           maxLines: 10,
                           minLines: 4,
@@ -500,6 +524,18 @@ class AddDestinationState extends State<AddDestination> {
                             labelText: 'Description',
                           ),
                         ),
+                      ),
+
+                      Center(
+                        heightFactor: 2,
+                        child:
+                            Text("Pick location of the destination from the map"),
+                      ),
+
+                      Container(
+                        width: double.infinity,
+                        height: 300,
+                        child: LocationPicker(setLocation),
                       ),
 
                       SizedBox(
