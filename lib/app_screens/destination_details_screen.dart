@@ -183,17 +183,22 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          (fetchedDestination.likedUsers.length == 1)
+                          fetchedDestination.likedUsers.length == 1
                               ? Text(
-                                  "This destination only has 1 like",
-                                  style: TextStyle(fontSize: 15),
+                                  fetchedDestination.likedUsers.length
+                                          .toString() +
+                                      " Like",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 )
                               : Text(
-                                  "This destination has " +
-                                      fetchedDestination.likedUsers.length
+                                  fetchedDestination.likedUsers.length
                                           .toString() +
-                                      " likes",
-                                  style: TextStyle(fontSize: 15),
+                                      " Likes",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                           SizedBox(
                             width: 20,
@@ -210,24 +215,22 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                       ),
                     ),
                     Container(
+                      padding: EdgeInsets.all(20),
                       child: Text(
                         fetchedDestination.description,
                       ),
                     ),
-                    Text(
-                      "Destination location",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
+                    Center(
+                      heightFactor: 2,
+                      child: Text(
+                        "Location",
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      padding: EdgeInsets.all(2),
-                      margin: EdgeInsets.only(top: 0.0, bottom: 35.0),
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(10)),
                       height: 300,
                       child: DisplayLocation(fetchedDestination.latitude,
                           fetchedDestination.longitude),
