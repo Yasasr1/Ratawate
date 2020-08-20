@@ -8,8 +8,6 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:rasthiyaduwa_app/widgets/location_picker.dart';
-
 import './side_drawer.dart';
 import '../providers/auth.dart';
 
@@ -21,9 +19,6 @@ class AddDestination extends StatefulWidget {
 class AddDestinationState extends State<AddDestination> {
   String type;
   String district;
-  double lat;
-  double long;
-  bool isLocationPicked;
 
   var _formKey = GlobalKey<FormState>();
 
@@ -32,7 +27,6 @@ class AddDestinationState extends State<AddDestination> {
     super.initState();
     type = '';
     district = '';
-    isLocationPicked = false;
   }
 
   TextEditingController titleController = TextEditingController();
@@ -140,11 +134,6 @@ class AddDestinationState extends State<AddDestination> {
   }
 
   Future submitDestination() async {
-    if (!isLocationPicked) {
-      _showDialog(
-          "Please pick a location from the map", "Location Not Picked!");
-      return;
-    }
     setState(() {
       _isLoading = true;
     });
@@ -171,8 +160,8 @@ class AddDestinationState extends State<AddDestination> {
         'destinationType': type,
         'isVerified': false,
         'userId': uid,
-        'latitude': lat,
-        'longitude': long
+        'latitude': 0.0,
+        'longitude': 0.0
       });
       print(districtController.text);
     } catch (err) {
@@ -203,13 +192,13 @@ class AddDestinationState extends State<AddDestination> {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  void setLocation(double latitude, double longitude) {
+  /*void setLocation(double latitude, double longitude) {
     setState(() {
       lat = latitude;
       long = longitude;
       isLocationPicked = true;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -513,9 +502,6 @@ class AddDestinationState extends State<AddDestination> {
                             if (value.isEmpty) {
                               return 'Please enter a Description';
                             }
-                            if (lat == null) {
-                              return 'Please pick the location from the map';
-                            }
                             return null;
                           },
                           onChanged: (value) {
@@ -526,19 +512,6 @@ class AddDestinationState extends State<AddDestination> {
                           ),
                         ),
                       ),
-
-                      Center(
-                        heightFactor: 2,
-                        child: Text(
-                            "Pick location of the destination from the map"),
-                      ),
-
-                      Container(
-                        width: double.infinity,
-                        height: 300,
-                        child: LocationPicker(setLocation),
-                      ),
-
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: RaisedButton(

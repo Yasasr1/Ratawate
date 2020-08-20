@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rasthiyaduwa_app/providers/auth.dart';
-import 'package:rasthiyaduwa_app/widgets/display_location.dart';
-import '../providers/destination.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
+import '../providers/auth.dart';
+import '../widgets/display_location.dart';
 import '../providers/destinations.dart';
+import '../providers/destination.dart';
 
 class DestinationDetailsScreen extends StatefulWidget {
   @override
@@ -220,21 +221,43 @@ class _DestinationDetailsScreenState extends State<DestinationDetailsScreen> {
                         fetchedDestination.description,
                       ),
                     ),
-                    Center(
-                      heightFactor: 2,
-                      child: Text(
-                        "Location",
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      height: 300,
-                      child: DisplayLocation(fetchedDestination.latitude,
-                          fetchedDestination.longitude),
-                    ),
+                    (fetchedDestination.latitude != 0.0 &&
+                            fetchedDestination.longitude != 0.0)
+                        ? Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  Center(
+                                    heightFactor: 2,
+                                    child: Text(
+                                      "Location",
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  FlatButton.icon(
+                                      onPressed: () {
+                                        MapsLauncher.launchCoordinates(
+                                            fetchedDestination.latitude, fetchedDestination.longitude);
+                                      },
+                                      icon: Icon(Icons.map, color: Colors.purple,),
+                                      label: Text("Open in maps"))
+                                ],
+                              ),
+                              Container(
+                                height: 300,
+                                child: DisplayLocation(
+                                    fetchedDestination.latitude,
+                                    fetchedDestination.longitude),
+                              ),
+                            ],
+                          )
+                        : Center(
+                            child: Text("Location not verified"),
+                          ),
                   ],
                 ),
               ),

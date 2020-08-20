@@ -1,3 +1,6 @@
+//used to pick a location when submiting a destination.
+//CURRENTLY UNUSED
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter/services.dart';
