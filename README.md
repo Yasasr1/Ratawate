@@ -1,4 +1,4 @@
-# rasthiyaduwa_app
+# Ratawate
 
 A new Flutter project.
 
